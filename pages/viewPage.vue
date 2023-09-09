@@ -36,10 +36,50 @@
                                         style="display: block; margin: 0 auto;">
                                 </v-carousel-item>
                             </v-carousel>
+                            <v-btn @click="full()">Полноэкранный режим</v-btn>
                         </v-list>
                     </v-card>
                 </v-col>
             </v-row>
+            <div v-if="fullView">
+                <v-card min-width="100vw" min-height="100vh" style="position: fixed; top:0; left:0; z-index: 1;">
+                    <v-list>
+                        <v-card-title class="orange darken-1">
+                            <div class="input-file-row">
+                                <v-row>
+                                    <v-col cols="5">
+                                        <label class="input-file">
+                                            <input type="file" id="catalog" ref="catalog" webkitdirectory directory multiple
+                                                @change="open()" class="input">
+                                            <span>Изменить дирректорию</span>
+                                        </label>
+                                    </v-col>
+                                    <v-col cols="5">
+                                        <v-select v-model="select" :items="modes" label="Режим выравнивания/вписывания"
+                                            dense style="width: 80%;"></v-select>
+                                    </v-col>
+                                    <v-col cols="2">
+                                        <v-btn icon @click="fullView = false">
+                                            <v-icon style="font-size: 50px;">mdi-close-circle-outline</v-icon>
+                                        </v-btn>
+                                    </v-col>
+                                </v-row>
+                            </div>
+                        </v-card-title>
+                        <v-carousel hide-delimiters height="90vh" style="width: 100vw; margin: auto;">
+                            <v-carousel-item v-for="(item, i) in imagesSrc" :key="i" style="width: 100vw;">
+                                <img v-if="select == 'просмотр в режиме 1:1'" :src="item" height="100%" width="60%"
+                                    max-height="100%" style="display: block; margin: 0 20%;">
+                                <v-img v-if="select == 'вписывание целиком'" :src="item" contain height="100%"></v-img>
+                                <img v-if="select == 'вписывание по горизонтали'" :src="item" width="100%" height="auto"
+                                    style="display: block; margin: auto 0;">
+                                <img v-if="select == 'вписывание по вертикали'" :src="item" height="100%" width="auto"
+                                    style="display: block; margin: 0 auto;">
+                            </v-carousel-item>
+                        </v-carousel>
+                    </v-list>
+                </v-card>
+            </div>
         </div>
     </client-only>
 </template>
@@ -131,8 +171,12 @@ export default {
         modes: ['вписывание целиком', 'вписывание по вертикали', 'вписывание по горизонтали', 'просмотр в режиме 1:1'],
         catalog: [],
         select: 'вписывание целиком',
+        fullView: false
     }),
     methods: {
+        full() {
+            this.fullView = true
+        },
         open() {
             console.log(this.$refs.catalog.files)
             this.catalog = this.$refs.catalog.files;

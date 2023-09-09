@@ -7,7 +7,6 @@
             <v-card-title class="orange darken-1">
               <span class="text-h5 white--text">Просмотр изображений</span>
               <v-spacer></v-spacer>
-              <v-btn>Закрыть</v-btn>
             </v-card-title>
             <v-container>
               <div class="input-file-row">
